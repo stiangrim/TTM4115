@@ -88,6 +88,7 @@ class TimerManagerComponent:
 
     def __init__(self):
         """
+
         Start the component.
         ## Start of MQTT
         We subscribe to the topic(s) the component listens to.
@@ -100,6 +101,7 @@ class TimerManagerComponent:
         `self.driver`. You can use it to send signals into specific state
         machines, for instance.
         """
+        #push
         # get the logger object for the component
         self._logger = logging.getLogger(__name__)
         print('logging under name {}.'.format(__name__))

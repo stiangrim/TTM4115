@@ -1,6 +1,7 @@
 import json
 import logging
-
+from threading import Thread
+import json
 import paho.mqtt.client as mqtt
 import stmpy
 
@@ -27,9 +28,29 @@ class TimerLogic:
 
         # TODO: build the transitions
 
+        t0 = {'source' : 'initial',
+              'target' : 'active',
+              'effect': 'started; start_timer("t", self.duration)'}
+
+        t1 = {'trigger' : 'report',
+              'source' : 'active',
+              'target' : 'active',
+              'effect': 'report_status'}
+
+        t2 = {'trigger' : 't',
+              'source' : 'active',
+              'target' : 'completed',
+              'effect': 'timer_completed'}
+
         self.stm = stmpy.Machine(name=name, transitions=[t0, t1, t2], obj=self)
 
     # TODO define functions as transition effetcs
+
+    def started(self):
+        pass
+
+    def report_status(self):
+
 
 
 class TimerManagerComponent:

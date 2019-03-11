@@ -75,8 +75,6 @@ class TimerManagerComponent:
         {"command": "status_single_timer", "name": "spaghetti"}
     """
 
-    def
-
     def on_connect(self, client, userdata, flags, rc):
         # we just log that we are connected
         self._logger.debug('MQTT connected to {}'.format(client))
@@ -157,6 +155,7 @@ class TimerManagerComponent:
         self.stm_driver = stmpy.Driver()
         self.stm_driver.start(keep_active=True)
         self._logger.debug('Component initialization finished')
+        self.mqtt_client.publish(MQTT_TOPIC_OUTPUT, "Timer Manager Connected")
 
     def stop(self):
         """

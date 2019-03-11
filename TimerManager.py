@@ -30,7 +30,7 @@ class TimerLogic:
 
         t0 = {'source' : 'initial',
               'target' : 'active',
-              'effect': 'started; start_timer("t", self.duration)'}
+              'effect': 'started'}
 
         t1 = {'trigger' : 'report',
               'source' : 'active',
@@ -47,9 +47,16 @@ class TimerLogic:
     # TODO define functions as transition effetcs
 
     def started(self):
-        pass
+        self.stm.start_timer('t', self.duration)
 
     def report_status(self):
+        return self.stm.get_timer('t')
+
+    def timer_completed(self):
+        self.component.mqtt_client.publish(MQTT_TOPIC_OUTPUT, str(self.name) + ' timer is finished!', 2)
+        self.stm.terminate()
+
+
 
 
 
@@ -67,6 +74,8 @@ class TimerManagerComponent:
         {"command": "status_all_timers"}
         {"command": "status_single_timer", "name": "spaghetti"}
     """
+
+    def
 
     def on_connect(self, client, userdata, flags, rc):
         # we just log that we are connected
@@ -103,9 +112,11 @@ class TimerManagerComponent:
             timer_stm = TimerLogic(timer_name, duration, self)
             self.stm_driver.add_machine(timer_stm)
         elif command == "status_all_timers":
-            print("TODO")
+            for i in self.stm_driver._stms_by_id:
+                self.stm_driver.send('report', i)
         elif command == "status_single_timer":
-            print("TODO")
+            timer_name = payload.get('name')
+            self.stm_driver.send('report', timer_name)
 
     def __init__(self):
         """

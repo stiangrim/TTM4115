@@ -1,3 +1,4 @@
+import json
 import logging
 from threading import Thread
 import json
@@ -86,10 +87,25 @@ class TimerManagerComponent:
         self._logger.debug('Incoming message to topic {}'.format(msg.topic))
 
         # TODO unwrap JSON-encoded payload
+        try:
+            payload = json.loads(msg.payload.decode("utf-8"))
+        except Exception as err:
+            self._logger.error('Message sent to topic {} had no valid JSON. Message ignored. {}'.format(msg.topic, err))
+            return
 
         # TODO extract command
+        command = payload.get('command')
 
         # TODO determine what to do
+        if command == "new_timer":
+            timer_name = payload.get('name')
+            duration = payload.get('duration')
+            timer_stm = TimerLogic(timer_name, duration, self)
+            self.stm_driver.add_machine(timer_stm)
+        elif command == "status_all_timers":
+            print("TODO")
+        elif command == "status_single_timer":
+            print("TODO")
 
     def __init__(self):
         """

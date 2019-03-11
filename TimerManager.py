@@ -93,6 +93,7 @@ class TimerManagerComponent:
         ## Start of MQTT
         We subscribe to the topic(s) the component listens to.
         The client is available as variable `self.client` so that subscriptions
+        #
         may also be changed over time if necessary.
         The MQTT client reconnects in case of failures.
         ## State Machine driver
